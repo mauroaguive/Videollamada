@@ -1,0 +1,93 @@
+Actúa como un arquitecto de software senior (full-stack) especializado en salud (IPS), seguridad y videollamadas WebRTC.
+
+Quiero que desarrolles un MVP funcional de un aplicativo de TELECONSULTAS para una IPS con estas reglas:
+
+## Contexto
+La IPS ofrece teleconsultas para pacientes que no pueden desplazarse o que están en otras ubicaciones. Cada paciente agendado debe recibir un link único para conectarse a una videollamada en el horario de su cita.
+
+## Objetivo del MVP
+1) Permitir a la IPS (personal autorizado) crear/agendar teleconsultas.
+2) Generar un link único por cita (no reutilizable, con expiración).
+3) Enviar el link al paciente por email (y opcional WhatsApp en fase 2).
+4) Permitir que paciente y profesional entren a una sala de videollamada segura.
+5) Registrar auditoría mínima (quién entró, cuándo, duración, IP, user agent).
+6) Panel administrativo simple para ver agenda y estado de cada cita.
+
+## Requerimientos funcionales
+### Roles
+- ADMIN: gestiona usuarios, configuración general.
+- PROFESIONAL: ve agenda propia, inicia/atiende teleconsulta, finaliza.
+- PACIENTE: no necesita usuario/contraseña en MVP; entra con link seguro.
+
+### Flujo de agenda
+- Crear cita: paciente (nombre, documento, teléfono, email), profesional, fecha/hora, duración, tipo de consulta.
+- Estado cita: PROGRAMADA → EN SALA → FINALIZADA / CANCELADA / NO ASISTE.
+- Ventana de acceso: permitir entrar 10 minutos antes, bloquear si ya expiró.
+- Link único: token firmado (JWT o token aleatorio en DB) + expiración + un solo uso (configurable).
+
+### Videollamada
+- Implementar WebRTC:
+  - 1 a 1 (paciente-profesional) en MVP.
+  - Señalización usando WebSocket (Socket.IO).
+  - STUN (público) por defecto; dejar listo soporte TURN (configurable por env).
+- Funciones en sala:
+  - Activar/desactivar micrófono y cámara.
+  - Botón “finalizar consulta” (solo profesional) que corta la llamada y pasa a FINALIZADA.
+  - Reintentos de reconexión.
+- No grabación en MVP (solo dejar “placeholder” y diseño para fase futura).
+
+### Notificaciones
+- Email con link y recordatorio (al crear la cita y opcional 1 hora antes).
+- Plantilla de correo simple con: fecha/hora local (America/Bogota), profesional, instrucciones, link, soporte.
+
+## Requerimientos no funcionales
+- Responsive (móvil/desktop), UI limpia.
+- Seguridad:
+  - HTTPS (asumir proxy tipo Nginx/Cloudflare en prod).
+  - Tokens firmados, expiración, anti-replay.
+  - Rate limiting en endpoints públicos del link.
+  - Validar que el paciente solo accede a su cita.
+  - Logs de auditoría.
+- Privacidad: no exponer datos sensibles en URL (solo token).
+- Cumplir buenas prácticas para entorno salud (mínimo de logs con PHI).
+
+## Stack sugerido (puedes proponer mejoras)
+- Backend: Node.js + Express + Socket.IO
+- DB: MySQL (porque la IPS ya lo usa) con migraciones
+- Frontend: React (Vite) o Next.js, a tu criterio, pero rápido y claro
+- Auth panel: JWT para admin/profesional
+- Paciente: acceso por token de cita
+- Contenedores: Docker Compose (app + db + reverse proxy opcional)
+
+## Entregables que debes producir (OBLIGATORIO)
+1) Arquitectura y explicación breve del flujo (agenda → link → sala).
+2) Modelo de datos MySQL: tablas y campos (citas, profesionales, auditoría, tokens/links, etc).
+3) Endpoints REST (con ejemplos request/response):
+   - crear cita, listar agenda, ver detalle, cancelar, marcar no asiste, generar/revocar link, etc.
+4) Eventos Socket.IO para señalización WebRTC (offer/answer/ice).
+5) Código base del proyecto con estructura de carpetas:
+   - backend completo con API + sockets
+   - frontend con pantallas:
+     - Login (admin/profesional)
+     - Agenda del profesional
+     - Crear cita (admin o profesional según permisos)
+     - Pantalla de “Sala de videollamada” paciente/profesional
+6) Scripts de ejecución local:
+   - docker-compose.yml
+   - variables de entorno (.env.example)
+7) Checklist de producción (mínimo): TURN, HTTPS, dominios, límites, monitoreo.
+
+## Restricciones y calidad
+- No uses servicios externos de videollamada tipo Zoom/Meet: debe ser WebRTC propio.
+- Evita dependencias innecesarias.
+- Incluye validaciones y manejo de errores.
+- Incluye comentarios en partes críticas (seguridad, tokens, WebRTC).
+- Entrega el código completo, compilable y ejecutable localmente.
+
+## Fase 2 (solo diseña, no implementes)
+- Integración con la app de la IPS (API REST / SSO)
+- WhatsApp (Twilio o proveedor local)
+- Consentimiento informado digital previo a ingresar
+- Grabación con permiso y almacenamiento seguro
+
+Empieza proponiendo la arquitectura y el modelo de datos, luego genera el esqueleto del repositorio y el código.

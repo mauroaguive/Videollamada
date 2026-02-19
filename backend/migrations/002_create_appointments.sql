@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS appointments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  professional_id INT NOT NULL,
+  patient_name VARCHAR(200) NOT NULL,
+  patient_document_type ENUM('CC', 'CE', 'TI', 'PP', 'RC') NOT NULL,
+  patient_document VARCHAR(50) NOT NULL,
+  patient_phone VARCHAR(20) NOT NULL,
+  patient_email VARCHAR(255) NOT NULL,
+  scheduled_at DATETIME NOT NULL,
+  duration_minutes INT NOT NULL DEFAULT 30,
+  consultation_type VARCHAR(100) NOT NULL DEFAULT 'General',
+  status ENUM('PROGRAMADA', 'EN_SALA', 'FINALIZADA', 'CANCELADA', 'NO_ASISTE') NOT NULL DEFAULT 'PROGRAMADA',
+  notes TEXT DEFAULT NULL,
+  created_by INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_appointments_professional FOREIGN KEY (professional_id) REFERENCES users(id),
+  CONSTRAINT fk_appointments_created_by FOREIGN KEY (created_by) REFERENCES users(id),
+  INDEX idx_appointments_professional (professional_id),
+  INDEX idx_appointments_scheduled (scheduled_at),
+  INDEX idx_appointments_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

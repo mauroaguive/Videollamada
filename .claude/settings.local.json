@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\":*)",
+      "Bash(mysql:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(findstr:*)",
+      "Bash(dir:*)",
+      "Bash(node:*)",
+      "Bash(npx vite build:*)",
+      "Bash(npx vite:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd //c \"taskkill /PID 35908 /F\")",
+      "Bash(C:/xampp/mysql/bin/mysql.exe:*)",
+      "Bash(curl:*)",
+      "Bash(JWT=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkci5nYXJjaWFAdGVsZWNvbnN1bHRhLmNvbSIsInJvbGUiOiJQUk9GRVNJT05BTCIsImlhdCI6MTc3MTQ1OTA0NiwiZXhwIjoxNzcxNDYyNjQ2fQ.SAVUdZ8uwvUSECVRFVJWVdTZT2mIxm6STOdCBSfxYQ4\")",
+      "Bash(ls:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: complete Teleconsulta IPS platform with Modern Clinical Warmth redesign\n\nFull visual redesign across 16 frontend files implementing the \"Modern Clinical Warmth\"\ndesign system: teal gradient sidebar, Bricolage Grotesque/Plus Jakarta Sans/JetBrains Mono\ntypography, warm ivory backgrounds, glassmorphism video controls, animated status badges,\nsplit login layout, staggered entry animations, and refined dark theme for video rooms.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git config:*)"
+    ]
+  }
+}
